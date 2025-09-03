@@ -11,9 +11,11 @@ import {
 import { Input } from "@/components/ui/input";
 import Password from "@/components/ui/Password";
 import { cn } from "@/lib/utils";
+import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const registerSchema = z
@@ -45,8 +47,20 @@ export function RegisterForm({
     mode: "onChange",
   });
   const { isValid, isSubmitting } = form.formState;
-  const onSubmit = (data: z.infer<typeof registerSchema>) => {
-    console.log(data);
+  const [register] = useRegisterMutation();
+  const onSubmit = async (data: z.infer<typeof registerSchema>) => {
+    const userInfo = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    };
+    try {
+      const result = await register(userInfo).unwrap();
+      toast.success("User Created Successfully");
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
