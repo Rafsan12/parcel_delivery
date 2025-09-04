@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,17 +12,38 @@ import {
 import { Input } from "@/components/ui/input";
 import Password from "@/components/ui/Password";
 import { cn } from "@/lib/utils";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { useLoginMutation } from "@/redux/features/auth/auth.api";
+import type { ILogin } from "@/types";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { Link, useNavigate } from "react-router";
+import { toast } from "sonner";
 
 export function LoginForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  const form = useForm();
+  const form = useForm<ILogin>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    mode: "onChange",
+  });
   const { isValid, isSubmitting } = form.formState;
-  const onSubmit = (data) => {
-    console.log(data);
+  const [login] = useLoginMutation();
+  const navigate = useNavigate();
+
+  const onSubmit: SubmitHandler<ILogin> = async (data) => {
+    try {
+      const res = await login(data).unwrap();
+      console.log(res);
+    } catch (error: any) {
+      console.error(error);
+      if (error.status === 403) {
+        toast.error("Your are not verified");
+        navigate("/verify", { state: data.email });
+      }
+    }
   };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

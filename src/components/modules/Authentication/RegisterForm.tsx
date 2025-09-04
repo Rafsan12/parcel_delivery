@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -48,6 +48,8 @@ export function RegisterForm({
   });
   const { isValid, isSubmitting } = form.formState;
   const [register] = useRegisterMutation();
+  const navigate = useNavigate();
+
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
     const userInfo = {
       name: data.name,
@@ -57,6 +59,7 @@ export function RegisterForm({
     try {
       const result = await register(userInfo).unwrap();
       toast.success("User Created Successfully");
+      navigate("/verify");
       console.log(result);
     } catch (error) {
       console.error(error);
