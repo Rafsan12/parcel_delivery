@@ -41,7 +41,7 @@ export function LoginForm({
       console.error(error);
       if (error.status === 403) {
         toast.error("Your are not verified");
-        navigate("/verify", { state: data.email });
+        navigate("/verify", { state: { email: data.email } });
       }
     }
   };
