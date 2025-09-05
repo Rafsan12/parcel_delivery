@@ -11,6 +11,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  authApi,
+  useLogoutMutation,
+  useUserInfoQuery,
+} from "@/redux/features/auth/auth.api";
+import { useAppDispatch } from "@/redux/hooks";
 import { Link } from "react-router";
 import { ModeToggle } from "./ModeToggle";
 
@@ -21,6 +27,17 @@ const navigationLinks = [
 ];
 
 export default function Navbar() {
+  const { data } = useUserInfoQuery(undefined);
+  // console.log("RTK data:", data);
+  const userEmail = data?.data?.data?.email;
+  // console.log(data?.data?.data?.email);
+  const [logout] = useLogoutMutation();
+  const dispatch = useAppDispatch();
+
+  const handleLogout = async () => {
+    await logout(undefined);
+    dispatch(authApi.util.resetApiState());
+  };
   return (
     <header className="border-b ">
       <div className="container mx-auto px-4 flex h-16 items-center justify-between gap-4">
@@ -101,9 +118,20 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <ModeToggle />
 
-          <Button asChild className="text-sm">
-            <Link to={"/login"}>Login</Link>
-          </Button>
+          {userEmail && (
+            <Button
+              onClick={handleLogout}
+              variant="outline"
+              className="text-sm"
+            >
+              Logout
+            </Button>
+          )}
+          {!userEmail && (
+            <Button asChild className="text-sm">
+              <Link to={"/login"}>Login</Link>
+            </Button>
+          )}
         </div>
       </div>
     </header>

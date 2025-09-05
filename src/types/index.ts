@@ -11,4 +11,5 @@ export interface IResponse<T> {
 
 export interface ILoginResponse {
   data: Data;
+  success: boolean;
 }

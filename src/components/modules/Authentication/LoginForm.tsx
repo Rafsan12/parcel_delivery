@@ -36,6 +36,10 @@ export function LoginForm({
   const onSubmit: SubmitHandler<ILogin> = async (data) => {
     try {
       const res = await login(data).unwrap();
+      if (res.success) {
+        toast.success("Logged Successfully");
+        navigate("/");
+      }
       console.log(res);
     } catch (error: any) {
       console.error(error);
