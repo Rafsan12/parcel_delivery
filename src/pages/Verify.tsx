@@ -28,7 +28,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -45,6 +45,7 @@ export default function Verify() {
   const [sendOtp] = useSendOTPMutation();
   const [verifyOtp] = useVerifyOTPMutation();
   const [timer, setTimer] = useState(120);
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof verifySchema>>({
     resolver: zodResolver(verifySchema),
@@ -79,6 +80,7 @@ export default function Verify() {
       if (res.success) {
         toast.success("OTP verified", { id: toastId });
         setConfirmed(true);
+        navigate("/login");
       }
     } catch (error) {
       toast.error("Failed to  OTP verified", { id: toastId });
