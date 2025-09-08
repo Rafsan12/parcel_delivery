@@ -1,6 +1,8 @@
-import Analytics from "@/pages/Admin/Analytics";
-import Create_Parcel from "@/pages/Admin/Create_Parcel";
+// import Analytics from "@/pages/Admin/Analytics";
 import type { ISidebarItems } from "@/types";
+import { lazy } from "react";
+
+const Analytics = lazy(() => import("@/pages/Admin/Analytics"));
 
 export const adminSidebarItems: ISidebarItems[] = [
   {
@@ -11,17 +13,6 @@ export const adminSidebarItems: ISidebarItems[] = [
         title: "Analytics",
         url: "/admin/analytics",
         component: Analytics,
-      },
-    ],
-  },
-  {
-    title: "Parcel Management",
-
-    items: [
-      {
-        title: "Create_Parcel",
-        url: "/admin/create_parcel",
-        component: Create_Parcel,
       },
     ],
   },

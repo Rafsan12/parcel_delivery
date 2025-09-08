@@ -8,7 +8,7 @@ export const getSidebarItems = (userRole: TRole) => {
   //   console.log(role.SUPER_ADMIN);
   switch (userRole) {
     case role.SUPER_ADMIN:
-      return [...adminSidebarItems];
+      return [...adminSidebarItems, ...senderSidebarItems];
     case role.ADMIN:
       return [...adminSidebarItems];
 

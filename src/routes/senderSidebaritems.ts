@@ -1,4 +1,4 @@
-import Create_Parcel from "@/pages/Admin/Create_Parcel";
+import Create_Parcel from "@/pages/sender/Create_Parcel";
 import type { ISidebarItems } from "@/types";
 
 export const senderSidebarItems: ISidebarItems[] = [

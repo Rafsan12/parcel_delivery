@@ -3,9 +3,11 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import About from "@/pages/About";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
+import Unauthorized from "@/pages/Unauthorized";
 import Verify from "@/pages/Verify";
 import { generateRoute } from "@/utils/generateRoute";
-import { createBrowserRouter } from "react-router";
+import { withAuth } from "@/utils/withAuth";
+import { createBrowserRouter, Navigate } from "react-router";
 import { adminSidebarItems } from "./AdminSidebaritems";
 import { senderSidebarItems } from "./senderSidebaritems";
 
@@ -21,14 +23,20 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    Component: DashboardLayout,
+    Component: withAuth(DashboardLayout, ["SUPER_ADMIN"]),
     path: "/admin",
-    children: [...generateRoute(adminSidebarItems)],
+    children: [
+      { index: true, element: <Navigate to="/admin/analytics" /> },
+      ...generateRoute(adminSidebarItems),
+    ],
   },
   {
-    Component: DashboardLayout,
+    Component: withAuth(DashboardLayout, ["SENDER", "SUPER_ADMIN"]),
     path: "/sender",
-    children: [...generateRoute(senderSidebarItems)],
+    children: [
+      { index: true, element: <Navigate to="/sender/create_parcel" /> },
+      ...generateRoute(senderSidebarItems),
+    ],
   },
   {
     Component: Login,
@@ -41,5 +49,9 @@ export const router = createBrowserRouter([
   {
     Component: Verify,
     path: "/verify",
+  },
+  {
+    Component: Unauthorized,
+    path: "/unauthorized",
   },
 ]);
