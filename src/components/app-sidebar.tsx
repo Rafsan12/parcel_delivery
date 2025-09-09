@@ -31,7 +31,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <img src={Logo} alt="Parcel_Logo" className="w-20" />
+        <Link to={"/"}>
+          <img src={Logo} alt="Parcel_Logo" className="w-20" />
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
